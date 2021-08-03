@@ -1,0 +1,29 @@
+{% load static %}
+
+  <div id="wrapper">
+    <h3>Imágenes de la orden</h3>
+    <!-- Slideshow 3 -->
+    <div class="rslides_container">
+      <ul class="rslides" id="slider3">
+          {% for img in img_order %}
+            <li><img src="{{ img.image.url }}" alt=""></li>
+          {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+<script>
+    // You can also use "$(window).load(function() {"
+    $(function () {
+      $("#slider3").responsiveSlides({
+        auto: false,
+        pager: false,
+        nav: true,
+        speed: 500,
+        maxwidth: 800,
+        namespace: "large-btns"
+      });
+
+    });
+  </script>

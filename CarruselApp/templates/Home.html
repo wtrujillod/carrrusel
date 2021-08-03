@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ResponsiveSlides.js &middot; Alternative themes</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{% static '/bootstrap/dist/css/responsiveslides.css' %}">
+  <link rel="stylesheet" href="{% static '/bootstrap/dist/css/themes.css' %}">
+  <script src="{% static '/bootstrap/dist/js/jquery.min.js' %}"></script>
+  <script src="{% static '/bootstrap/dist/js/responsiveslides.min.js' %}"></script>
+
+
+    <script>
+
+    function buscar() {
+        let orden = $('#id_orden').val();
+        $.ajax({
+            url: "{% url 'carrusel_main' %}",
+            type: 'post',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            datatype: 'json',
+            data: {orden: orden},
+            statusCode: {
+                200: function (data) {
+                    $("#carrusel").html(data);
+                },
+                500: function () {
+
+                    toastr.error(gettext('Server error, contact an administrator.'), ' ', {timeOut: 2000})
+                }
+            }
+        });
+    }
+</script>
+</head>
+<body>
+    <div >
+        <div class="form">
+            <div class="form-group">
+                <h2>Ordenes de trabajo:</h2>
+                <br>
+                <select class="form-control" type="text" id="id_orden" name="OrdenTrabajo" onchange="buscar()">
+                    <option value="">Seleccionar...</option>
+                    {% for o in order %}
+                        <option value="{{ o.numero_orden }}">{{ o.numero_orden }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+<hr>
+<br>
+    <div id='carrusel' >
+        {% include 'carrusel_main.html' with feedback_form=feedback_form %}
+    </div>
+
+</body>
+</html>
